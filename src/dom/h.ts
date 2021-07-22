@@ -11,7 +11,7 @@ function h(tag: Tag, ...args: unknown[]): El | undefined {
   if (typeof tag === 'function') {
     return tag(...args);
   }
-  let el: El;
+  let el: El, arg: unknown;
   if (typeof tag === 'string') {
     el = api.ns
       ? document.createElementNS(api.ns, tag)
@@ -28,7 +28,7 @@ function h(tag: Tag, ...args: unknown[]): El | undefined {
     el = tag;
   }
   for (let i = 0; i < args.length; i++) {
-    const arg = args[i]
+    arg = args[i]
 
     // @ts-expect-error Empty if
     // eslint-disable-next-line eqeqeq
@@ -38,7 +38,7 @@ function h(tag: Tag, ...args: unknown[]): El | undefined {
       api.add(el, arg);
     }
     else if (Array.isArray(arg)) {
-      args.push(...arg);
+      args.splice(i + 1 , 0, ...arg)
     }
     else if (typeof arg === 'object') {
       // eslint-disable-next-line no-implicit-coercion
